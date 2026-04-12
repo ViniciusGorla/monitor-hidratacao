@@ -1,5 +1,5 @@
 # Monitor de Hidratacao CLI (v1.0.0)
-
+![CI Status](https://github.com/ViniciusGorla/monitor-hidratacao/actions/workflows/ci.yml/badge.svg)
 ## Qual problema estou tentando resolver?
 A desidratacao cronica ou o esquecimento do consumo de agua durante a rotina moderna. Muitas pessoas que trabalham ou estudam horas na frente do computador negligenciam a hidratacao, o que causa fadiga, queda de produtividade e problemas de saude a longo prazo.
 
