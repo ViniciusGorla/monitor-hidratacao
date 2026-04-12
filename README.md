@@ -22,3 +22,4 @@ O Monitor de Hidratacao oferece uma solucao minimalista via terminal (CLI). Noss
 1. Instale as dependencias:
    ```bash
    python -m pip install -r requirements.txt
+   Autor: [Vinicius Gorla Cartaxo de Arruda]Versao: 1.0.0 (MAJOR.MINOR.PATCH)
