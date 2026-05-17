@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Hidratação Inteligente</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-hover: #0369a1;
+            --bg: #f0f9ff;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .clima-badge {
+            background-color: #ffedd5;
+            color: #ea580c;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-container {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .meta-txt {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            background-color: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .btn-add {
+            background-color: #10b981;
+            margin-top: 10px;
+        }
+        .btn-add:hover {
+            background-color: #059669;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💧 Hidratação Inteligente</h1>
+    
+    <div id="setup-step">
+        <div class="form-group">
+            <label for="peso">Seu Peso (kg):</label>
+            <input type="number" id="peso" placeholder="Ex: 70" step="0.1">
+        </div>
+        <div class="form-group">
+            <label for="cidade">Sua Cidade:</label>
+            <input type="text" id="cidade" placeholder="Ex: Brasilia">
+        </div>
+        <button onclick="configurarMonitor()">Calcular Meta</button>
+    </div>
+
+    <div id="monitor-step" class="status-container">
+        <div id="clima-alerta" class="clima-badge"></div>
+        <div class="meta-txt" id="texto-meta"></div>
+        
+        <div class="progress-bar">
+            <div id="barra-progresso" class="progress-fill"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="qtd-agua">Bebeu quanta água agora? (Litros):</label>
+            <input type="number" id="qtd-agua" placeholder="Ex: 0.25" step="0.05">
+        </div>
+        <button class="btn-add" onclick="adicionarAgua()">Registrar Água</button>
+    </div>
+</div>
+
+<script>
+    let metaDiaria = 0;
+    let totalConsumido = 0;
+
+    async function buscarClima(cidade) {
+        try {
+            const cidadeFormatada = encodeURIComponent(cidade);
+            const resposta = await fetch(`https://wttr.in/${cidadeFormatada}?format=j1`);
+            if (!resposta.ok) return null;
+            const dados = await resposta.json();
+            return parseFloat(dados.current_condition[0].temp_C);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    async function configurarMonitor() {
+        const peso = parseFloat(document.getElementById('peso').value);
+        const cidade = document.getElementById('cidade').value.trim();
+
+        if (!peso || peso <= 0 || !cidade) {
+            alert("Por favor, preencha os campos corretamente.");
+            return;
+        }
+
+        // Regra de negócio base da Etapa 1
+        metaDiaria = peso * 0.035;
+
+        document.getElementById('setup-step').style.display = 'none';
+        const monitorStep = document.getElementById('monitor-step');
+        monitorStep.style.display = 'block';
+        
+        const alertaClima = document.getElementById('clima-alerta');
+        alertaClima.style.display = 'block';
+        alertaClima.innerText = "Buscando clima atual da sua cidade...";
+
+        // Chamada da API Pública (Requisito da Etapa 2)
+        const temp = await buscarClima(cidade);
+
+        if (temp !== null) {
+            if (temp > 28) {
+                metaDiaria += 0.50; // Adiciona 500ml se estiver calor
+                alertaClima.innerHTML = `☀️ Atual em ${cidade}: <b>${temp}°C</b>. Está calor! Adicionamos 500ml à sua meta de segurança.`;
+                alertaClima.style.backgroundColor = '#ffedd5';
+                alertaClima.style.color = '#ea580c';
+            } else {
+                alertaClima.innerHTML = `🌤️ Atual em ${cidade}: <b>${temp}°C</b>. Temperatura amena, mantenha sua meta padrão.`;
+                alertaClima.style.backgroundColor = '#f0fdf4';
+                alertaClima.style.color = '#16a34a';
+            }
+        } else {
+            alertaClima.innerText = "Não foi possível conectar à API de clima. Usando meta padrão.";
+        }
+
+        atualizarInterface();
+    }
+
+    function adicionarAgua() {
+        const qtd = parseFloat(document.getElementById('qtd-agua').value);
+        if (!qtd || qtd <= 0) {
+            alert("Digite uma quantidade válida maior que zero.");
+            return;
+        }
+        totalConsumido += qtd;
+        document.getElementById('qtd-agua').value = '';
+        atualizarInterface();
+
+        if (totalConsumido >= metaDiaria) {
+            alert("🎉 PARABÉNS! Você atingiu sua meta diária de hidratação!");
+        }
+    }
+
+    function atualizarInterface() {
+        document.getElementById('texto-meta').innerHTML = `Progresso: <b>${totalConsumido.toFixed(2)}L</b> de <b>${metaDiaria.toFixed(2)}L</b>`;
+        let porcentagem = (totalConsumido / metaDiaria) * 100;
+        if (porcentagem > 100) porcentagem = 100;
+        document.getElementById('barra-progresso').style.width = `${porcentagem}%`;
+    }
+</script>
+</body>
+</html>
