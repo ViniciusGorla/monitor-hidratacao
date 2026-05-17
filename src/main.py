@@ -32,7 +32,7 @@ def registrar_agua(consumido: float, quantidade: float) -> float:
     """Adiciona a quantidade de agua bebida ao total consumido."""
     if quantidade <= 0:
         raise ValueError("A quantidade deve ser maior que zero.")
-    return consumido + quantity
+    return consumido + quantidade
 
 
 def interface_cli():
