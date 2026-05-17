@@ -1,28 +1,55 @@
-# Monitor de Hidratacao CLI (v1.0.0)
+# 💧 Monitor de Hidratação Inteligente
+
 ![CI Status](https://github.com/ViniciusGorla/monitor-hidratacao/actions/workflows/ci.yml/badge.svg)
-## Qual problema estou tentando resolver?
-A desidratacao cronica ou o esquecimento do consumo de agua durante a rotina moderna. Muitas pessoas que trabalham ou estudam horas na frente do computador negligenciam a hidratacao, o que causa fadiga, queda de produtividade e problemas de saude a longo prazo.
 
-## Quem e afetado por esse problema?
-Estudantes, trabalhadores de escritorio, pessoas neurodivergentes (que frequentemente esquecem das necessidades fisiologicas devido ao hiperfoco) e idosos.
+> **Versão:** 1.1.0  
+> **Autor:** Vinícius Gorla  
+> **Contexto:** Projeto desenvolvido como entrega final para o Bootcamp de Desenvolvimento de Software.
 
-## Como minha aplicacao ajuda?
-O Monitor de Hidratacao oferece uma solucao minimalista via terminal (CLI). Nossa interface permite que o usuario calcule sua necessidade hidrica com base no peso e registre rapidamente o consumo durante o dia, sem sair da sua tela de trabalho e sem as distracoes de aplicativos de celular.
+Um aplicativo inteligente focado em saúde que integra lógica de terminal (CLI), consumo de APIs públicas globais e uma interface web moderna de alta usabilidade.
 
 ---
 
-## Tecnologias Utilizadas
-- **Python** (Linguagem principal)
-- **Pytest** (Testes automatizados)
-- **Flake8** (Linting e analise estatica)
-- **GitHub Actions** (CI - Integracao Continua)
+## 🌐 Demonstração em Tempo Real
 
-## Como instalar e executar
+A interface visual do projeto já está compilada, hospedada e disponível publicamente através do **GitHub Pages**. Você pode realizar simulações de cálculo instantaneamente pelo navegador:
 
-1. Instale as dependencias:
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
+👉 **[Acesse o HidraMonitor Web aqui](https://viniciusgorla.github.io/monitor-hidratacao/)**
 
-**Autor:** Vinicius Gorla Cartaxo de Arruda  
-**Versão:** 1.0.0
+---
+
+## ⚙️ Arquitetura e Funcionalidades
+
+O projeto foi estruturado para resolver o problema da desidratação diária unindo precisão matemática a dados contextuais do usuário:
+
+* **Cálculo Base Científico:** Automatiza a recomendação padrão de consumo diário utilizando a métrica de 35 ml de água por quilograma de peso corporal.
+* **Integração com API de Clima (CLI):** O script em Python realiza requisições HTTP para o serviço global `wttr.in`. Caso a temperatura detectada na cidade informada seja maior que 28°C, o sistema recalcula e eleva dinamicamente a meta em +500 ml.
+* **Interface Web Responsiva:** Aplicação Single Page (SPA) em *Dark Mode*, otimizada para dispositivos móveis e desktop, utilizando lógica nativa de eventos javascript.
+* **Fluxo Dinâmico de Consumo:** CLI interativa com estruturas de repetição que guiam o usuário no registro fracionado de água até o atingimento da meta de saúde diária.
+
+---
+
+## 🛠️ Stack Tecnológica
+
+| Camada / Escopo | Tecnologia / Ferramenta | Descrição |
+| :--- | :--- | :--- |
+| **Backend & Core** | Python 3.x | Linguagem estrutural para regras de negócio. |
+| **Consumo de APIs** | Requests (HTTP Client) | Comunicação externa com o serviço meteorológico. |
+| **Frontend Web** | HTML5 / CSS3 / Vanilla JS | Estrutura semântica e UI responsiva em Dark Mode. |
+| **Testes de Software**| Pytest Framework | Suíte de testes unitários para as funções cruciais. |
+| **Garantia de Qualidade**| Flake8 (Linting) | Validador estático de boas práticas de código. |
+| **Pipeline Automatizado**| GitHub Actions (CI) | Automação de compilação, testes e deploys rápidos. |
+
+---
+
+## 🧪 Suíte de Testes e Qualidade de Código
+
+Para garantir a confiabilidade matemática das rotinas de cálculo do sistema, o projeto conta com cobertura de testes unitários automatizados.
+
+### Executando Testes Locais:
+```bash
+# Certifique-se de instalar as dependências
+pip install -r requirements.txt
+
+# Execute os testes unitários
+pytest
