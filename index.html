@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Hidratação Inteligente</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121214;
+            color: #e1e1e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #202024;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 350px;
+        }
+        h1 { color: #4ea8de; margin-bottom: 20px; }
+        label { display: block; margin: 10px 0 5px; text-align: left; }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #323238;
+            background-color: #121214;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background-color: #0096c7; }
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #29292e;
+            border-radius: 4px;
+            border-left: 4px solid #4ea8de;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💧 HidraMonitor</h1>
+    <label for="peso">Seu Peso (kg):</label>
+    <input type="number" id="peso" placeholder="Ex: 70">
+
+    <label for="clima">Clima da Região:</label>
+    <select id="clima">
+        <option value="normal">Normal / Frio</option>
+        <option value="quente">Quente / Seco</option>
+    </select>
+
+    <button onclick="calcular Hidratacao()">Calcular Meta</button>
+
+    <div id="resultado" class="resultado"></div>
+</div>
+
+<script>
+    function calcularHidratacao() {
+        const peso = parseFloat(document.getElementById('peso').value);
+        const clima = document.getElementById('clima').value;
+        const resultadoDiv = document.getElementById('resultado');
+
+        if (!peso || peso <= 0) {
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = '<span style="color: #f75a68;">Por favor, insira um peso válido.</span>';
+            return;
+        }
+
+        // Regra de negócio simples para a interface
+        let base = peso * 35; 
+        if (clima === 'quente') base += 500;
+
+        const litros = (base / 1000).toFixed(2);
+
+        resultadoDiv.style.display = 'block';
+        resultadoDiv.innerHTML = `<strong>Sua Meta Diária:</strong><br><span style="font-size: 20px; color: #4ea8de;">${litros} Litros</span><br><small>Ajustado para clima ${clima}</small>`;
+    }
+</script>
+</body>
+</html>
