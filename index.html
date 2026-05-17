@@ -69,12 +69,17 @@
         <option value="quente">Quente / Seco</option>
     </select>
 
-    <button onclick="calcular Hidratacao()">Calcular Meta</button>
+    <button onclick="calcularHidratacao()">Calcular Meta</button>
 
     <div id="resultado" class="resultado"></div>
 </div>
 
 <script>
+    function calcularHydratacao() {
+        // Alias para garantir retrocompatibilidade caso o HTML antigo tente chamar
+        calcularHidratacao();
+    }
+
     function calcularHidratacao() {
         const peso = parseFloat(document.getElementById('peso').value);
         const clima = document.getElementById('clima').value;
@@ -86,7 +91,6 @@
             return;
         }
 
-        // Regra de negócio simples para a interface
         let base = peso * 35; 
         if (clima === 'quente') base += 500;
 
